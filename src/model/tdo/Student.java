@@ -16,7 +16,11 @@ public class Student {
 		this.stu_class = stu_class;
 		this.status = status;
 	}
-	
+
+	public Student() {
+		// TODO Auto-generated constructor stub
+	}
+
 
 	public String getId() {
 		return id;

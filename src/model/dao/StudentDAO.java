@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import com.sun.org.apache.regexp.internal.recompile;
+
 import oracle.jdbc.driver.DBConversion;
 import ultilities.DBUtility;
 import model.tdo.Student;
@@ -16,6 +18,7 @@ public class StudentDAO {
 	public StudentDAO() throws ClassNotFoundException, SQLException{
 		cn = DBUtility.getConnection();
 	}
+	
 	public ArrayList<Student> list() throws SQLException{
 		PreparedStatement ps = cn.prepareStatement("SELECT * FROM hrd_students");
 		ResultSet rs = ps.executeQuery();
@@ -36,5 +39,27 @@ public class StudentDAO {
 			if(ps!=null)try{ps.close();}catch(SQLException e){throw e;}
 			if(cn!=null)try{cn.close();}catch(SQLException e){throw e;}
 		}
+	}
+	
+	public boolean addStudentInfo(Student stu) throws SQLException{
+		String sql = "insert into hrd_students(stu_id, stu_name, stu_gender, stu_university, stu_class, stu_status values(?,?,?,?,?,?)";
+		PreparedStatement pres = cn.prepareStatement(sql);
+			pres.setString(1, stu.getId());
+			pres.setString(2, stu.getName());
+			pres.setInt(3, stu.getGender());
+			pres.setString(4, stu.getUniversity());
+			pres.setString(5, stu.getStu_class());
+			pres.setInt(2, stu.getStatus());
+			pres.executeUpdate();
+			
+		pres.close();
+		return true;
+	}
+	
+	public int getLastId() throws SQLException{
+		String sql = "select id from hrd_students order by id DESC limit 1";
+		PreparedStatement pres  = cn.prepareStatement(sql);
+		
+		ResultSet rs = pres.executeQuery();
 	}
 }
