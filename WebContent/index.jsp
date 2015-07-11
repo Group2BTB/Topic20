@@ -10,9 +10,6 @@
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
 </head>
 <body>
-
-
-
 	<div class="container">
 		<div class="text-center h2 text-primary">Student Management</div>
 		<table class='table table-bordered' id="display">
@@ -89,6 +86,8 @@
 		}
 		function listdetailarticle(data) {
 			var str = "";
+			var gender = "";
+			var status = ""; 
 			/* display header of the table */
 			str = "<tr class='bg-success'><th class='text-center'>ID</th>"
 					+ "<th class='text-center'>Name</th>"
@@ -98,31 +97,28 @@
 					+ "<th class='text-center'>Status</th>"
 					+ "<th class='text-center'>Action</th></tr>";
 			/*-----end---- */
-
+			
 			for (var i = 0; i < data.length; i++) {
-				str += "<tr class='text-center'>" + "<td>"
-						+ data[i].id
-						+ "</td>"
-						+ "<td>"
-						+ data[i].name
-						+ "</td>"
-						+ "<td>"
-						+ data[i].gender
-						+ "</td>"
-						+ "<td>"
-						+ data[i].university
-						+ "</td>"
-						+ "<td>"
-						+ data[i].stu_class
-						+ "</td>"
-						+ "<td>"
-						+ data[i].status
-						+ "</td>"
+				if(data[i].gender == 1){
+					gender = "M";
+				}else{
+					gender = "F";
+				}
+				
+				if(data[i].status == 1){
+					status = "Active";
+				}else{
+					status = "Deactive";
+				}
+				str += "<tr class='text-center'>" + "<td>"+ data[i].id+ "</td>"
+						+ "<td>"+ data[i].name+ "</td>"
+						+ "<td>"+ gender+ "</td>"
+						+ "<td>"+ data[i].university+ "</td>"
+						+ "<td>"+ data[i].stu_class+ "</td>"
+						+ "<td>"+status + "</td>"
 						+ "<td><button class='btn btn-primary btn-sm' onclick='myedit("
-						+ data[i].id
-						+ ")'>Edit</button>&nbsp;<button class='btn btn-primary btn-sm' onclick='mydeletepro("
-						+ data[i].id
-						+ ")'>Delete</button>&nbsp;<button class='btn btn-primary btn-sm' data-toggle='modal' data-target='.bs-example-modal-lg'>Add</button></td>"
+						+ data[i].id+ ")'>Edit</button>&nbsp;<button class='btn btn-primary btn-sm' onclick='mydeletepro("
+						+ data[i].id+ ")'>Delete</button>&nbsp;<button class='btn btn-primary btn-sm' data-toggle='modal' data-target='.bs-example-modal-lg'>Add</button></td>"
 						+ "</tr>";
 			}
 			return str;
