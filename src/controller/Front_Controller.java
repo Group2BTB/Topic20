@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import controller.student.AddStudent;
 import controller.student.ListSudent;
 
 @WebServlet("*.act")
@@ -48,6 +49,14 @@ public class Front_Controller extends HttpServlet {
 					e.printStackTrace();
 				}
 				break;
+			case "/addstudent.act":
+				action = new AddStudent();
+				try {
+					forward = action.execute(request, response);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			default :
 				forward = new ActionForward();
 				forward.setPath("404.jsp");

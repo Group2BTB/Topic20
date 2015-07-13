@@ -6,9 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import com.sun.org.apache.regexp.internal.recompile;
-
-import oracle.jdbc.driver.DBConversion;
 import ultilities.DBUtility;
 import model.tdo.Student;
 
@@ -42,7 +39,7 @@ public class StudentDAO {
 	}
 	
 	public boolean addStudentInfo(Student stu) throws SQLException{
-		String sql = "insert into hrd_students(stu_id, stu_name, stu_gender, stu_university, stu_class, stu_status values(?,?,?,?,?,?)";
+		String sql = "insert into hrd_students(stu_id, stu_name, stu_gender, stu_university, stu_class, stu_status) values(?,?,?,?,?,?)";
 		PreparedStatement pres = cn.prepareStatement(sql);
 			pres.setString(1, stu.getId());
 			pres.setString(2, stu.getName());
@@ -56,10 +53,21 @@ public class StudentDAO {
 		return true;
 	}
 	
-	public int getLastId() throws SQLException{
-		String sql = "select id from hrd_students order by id DESC limit 1";
-		PreparedStatement pres  = cn.prepareStatement(sql);
-		
+	public Student getLastId() throws SQLException{
+		Student stu = new Student();
+		String sql = "select stu_id from hrd_students order by stu_id DESC limit 1";
+		PreparedStatement pres  = cn.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 		ResultSet rs = pres.executeQuery();
+		if(rs.last()){
+			stu.setId(rs.getString("stu_id"));
+			return stu;
+		}
+		return null;
 	}
+	
+	/*public static void main(String[] args) throws ClassNotFoundException, SQLException {
+		
+		StudentDAO dao = new StudentDAO();
+		System.out.println(dao.getLastId().getId());
+	}*/
 }

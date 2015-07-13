@@ -56,9 +56,9 @@
 										<label class="col-sm-2 control-label">Gender</label>
 										<div class="col-sm-10">
 											<label class="radio-inline"> <input type="radio"
-												name="gender" id="male" value="male"> Male
+												name="gender" id="male" value="1"> Male
 											</label> <label class="radio-inline"> <input type="radio"
-												name="gender" id="female" value="female"> Female
+												name="gender" id="female" value="0"> Female
 											</label>
 										</div>
 									</div>
@@ -68,7 +68,7 @@
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-						<button type="button" class="btn btn-primary">Save</button>
+						<button type="button" class="btn btn-primary" onclick="addStudent()">Save</button>
 					</div>
 				</div>
 				<!-- /.modal-content -->
@@ -122,6 +122,24 @@
 						+ "</tr>";
 			}
 			return str;
+		}
+		
+		function addStudent(){
+			$.ajax({
+				url: "addstudent.act",
+				method: "POST",
+				data: {
+					name : $("#name").val(),
+					gender: $("input[name=gender]").val(),
+					university : $("#university").val(),
+					stu_class : $("#stu_class").val(),
+					status: 1
+				},
+				success: function(data){
+					list();
+				}
+			}); 
+			//alert($("input[name=gender]").val());
 		}
 	</script>
 </body>
