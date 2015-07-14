@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.swing.text.html.HTMLDocument.HTMLReader.PreAction;
+
 import ultilities.DBUtility;
 import model.tdo.Student;
 
@@ -23,12 +25,12 @@ public class StudentDAO {
 		try{
 			while(rs.next()){
 				arrList.add(new Student(
-						rs.getString("stu_id"),
-						rs.getString("stu_name"),
-						rs.getInt("stu_gender"),
-						rs.getString("stu_university"),
-						rs.getString("stu_class"),
-						rs.getInt("stu_status")));
+					rs.getString("stu_id"),
+					rs.getString("stu_name"),
+					rs.getInt("stu_gender"),
+					rs.getString("stu_university"),
+					rs.getString("stu_class"),
+					rs.getInt("stu_status")));
 			}
 			return arrList;
 		}finally{
@@ -46,11 +48,10 @@ public class StudentDAO {
 			pres.setInt(3, stu.getGender());
 			pres.setString(4, stu.getUniversity());
 			pres.setString(5, stu.getStu_class());
-			pres.setInt(2, stu.getStatus());
+			pres.setInt(6, stu.getStatus());
 			pres.executeUpdate();
-			
-		pres.close();
-		return true;
+			pres.close();
+			return true;
 	}
 	
 	public Student getLastId() throws SQLException{
@@ -63,6 +64,30 @@ public class StudentDAO {
 			return stu;
 		}
 		return null;
+	}
+	
+	public boolean deleteStudent(String stu_id) throws SQLException{
+		String sql = "delete from hrd_students where stu_id=?";
+		PreparedStatement pres = cn.prepareStatement(sql);
+		pres.setString(1, stu_id);
+		pres.executeUpdate();
+		pres.close();
+		cn.close();
+		return true;
+	}
+	
+	public boolean updateStudent(Student stu) throws SQLException{
+		String sql = "update hrd_students set stu_name=?, stu_university=?, stu_class=?, stu_gender=? where id =?";
+		PreparedStatement pres = cn.prepareStatement(sql);
+		pres.setString(1, stu.getName());
+		pres.setString(2, stu.getUniversity());
+		pres.setString(3, stu.getStu_class());
+		pres.setInt(2, stu.getGender());
+		pres.executeUpdate();
+		
+		pres.close();
+		cn.close();
+		return true;
 	}
 	
 	/*public static void main(String[] args) throws ClassNotFoundException, SQLException {
