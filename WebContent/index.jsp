@@ -49,10 +49,11 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Gender</label>
 								<div class="col-sm-8">
-									<label class="radio-inline"> <input type="radio"
-										name="gender" id="male" value="1"> Male
-									</label> <label class="radio-inline"> <input type="radio"
-										name="gender" id="female" value="0"> Female
+									<label class="radio-inline"> 
+									<input type="radio" name="gender" id="male" value="1"> Male
+									</label> 
+									<label class="radio-inline"> 
+									<input type="radio" name="gender" id="female" value="0"> Female
 									</label>
 								</div>
 							</div>
@@ -60,7 +61,7 @@
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-						<button type="button" class="btn btn-primary" onclick="addStudent()" data-dismiss="modal">Save</button>
+						<button type="button" class="btn btn-primary" onclick="addStudent()" data-dismiss="modal" id="btnSave">Save</button>
 					</div>
 				</div>
 			</div>
@@ -102,7 +103,7 @@
 			for (var i = 0; i < data.length; i++) {
 				if (data[i].gender == 1) {
 					gender = "M";
-				} else {
+				} else if(data[i].gender == 0){
 					gender = "F";
 				}
 
@@ -118,7 +119,7 @@
 				str	+= "<td>"+ data[i].university+ "</td>";
 				str	+= "<td>"+ data[i].stu_class+ "</td>";
 				str += "<td>"+ status+ "</td>";
-				str += "<td><button class='btn btn-primary btn-sm' onclick= myedit('"+data[i].id+"')>Edit</button>&nbsp;";
+				str += "<td><button class='btn btn-primary btn-sm' onclick= putValuetoForm('"+data[i].id+"') data-toggle='modal' data-target='#myModal'>Edit</button>&nbsp;";
 				str += "<button class='btn btn-primary btn-sm'onclick= deleteStudent('"+ data[i].id+"')>Delete</button></td>";
 				str += "</tr>";
 			}
@@ -131,12 +132,13 @@
 				method : "POST",
 				data : {
 					stu_name : $("#stu_name").val(),
-					gender : $("input[name=gender]").val(),
+					gender : $("input[name=gender]:checked").val(),
 					stu_university : $("#stu_university").val(),
 					stu_class : $("#stu_class").val()
 				},
 				success:function(data){
 					lists();
+					clear();
 				},
 				error: function(data){
 					alert("fail");
@@ -172,13 +174,48 @@
 					stu_name : $("#stu_name").val(),
 					stu_university : $("#stu_university").val(),
 					stu_class: $("#stu_class").val(),
-					gender: $("input[name=gender]").val()
+					gender: $("input[name=gender]:checked").val()
 				},
 				success: function(data){
-					
+					lists();
+					clear();
+					$("#btnSave").attr("onclick","addStudent()");
 				},
-				error: 
+				error: function(data){
+					alert("fail");
+				}
 			});
+		}
+		
+		function putValuetoForm(id){
+			$.ajax({
+				url: "viewstudent.act",
+				method: "POST",
+				data: {
+					stu_id : id
+				},
+				success: function(data){
+					$("#stu_name").val(data.name);
+					$("#stu_university").val(data.university);
+					$("#stu_class").val(data.stu_class);
+					alert(data.gender);
+					if(data.gender === "1"){
+						$("#female").removeAttr("checked");
+						$("#male").attr("checked", "checked");
+					}else{
+						$("#male").removeAttr("checked");
+						$("#female").attr("checked", "checked");
+					}
+					$("#btnSave").attr("onclick","updateStudent('"+data.id+"')");
+				}
+			});
+		}
+		
+		function clear(){
+			$("#stu_name").val("");
+			$("#stu_university").val("");
+			$("#stu_class").val("");
+			$("input[name=gender]").removeAttr('checked');
 		}
 	</script>
 </body>

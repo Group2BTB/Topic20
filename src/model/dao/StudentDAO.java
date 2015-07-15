@@ -77,17 +77,39 @@ public class StudentDAO {
 	}
 	
 	public boolean updateStudent(Student stu) throws SQLException{
-		String sql = "update hrd_students set stu_name=?, stu_university=?, stu_class=?, stu_gender=? where id =?";
+		String sql = "update hrd_students set stu_name=?, stu_university=?, stu_class=?, stu_gender=? where stu_id =?";
 		PreparedStatement pres = cn.prepareStatement(sql);
 		pres.setString(1, stu.getName());
 		pres.setString(2, stu.getUniversity());
 		pres.setString(3, stu.getStu_class());
-		pres.setInt(2, stu.getGender());
+		pres.setInt(4, stu.getGender());
+		pres.setString(5, stu.getId());
 		pres.executeUpdate();
 		
 		pres.close();
 		cn.close();
 		return true;
+	}
+	
+	public Student ViewStudent(String id) throws SQLException{
+		Student stu = new Student();
+		PreparedStatement pre = cn.prepareStatement("select * from hrd_students where stu_id=?",ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+		pre.setString(1,id);
+		ResultSet rs = pre.executeQuery();
+		if(rs.last()){
+			stu.setId(id);
+			stu.setName(rs.getString("stu_name"));
+			stu.setUniversity(rs.getString("stu_university"));
+			stu.setStu_class(rs.getString("stu_class"));
+			stu.setGender(rs.getInt("stu_gender"));
+			stu.setStatus(rs.getInt("stu_status"));
+		}
+		
+		rs.close();
+		pre.close();
+		cn.close();
+		return stu;
+		
 	}
 	
 	/*public static void main(String[] args) throws ClassNotFoundException, SQLException {

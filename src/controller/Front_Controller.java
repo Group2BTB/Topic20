@@ -13,6 +13,7 @@ import controller.student.AddStudent;
 import controller.student.DeleteStudent;
 import controller.student.ListSudent;
 import controller.student.UpdateStudent;
+import controller.student.ViewStudent;
 
 @WebServlet("*.act")
 public class Front_Controller extends HttpServlet {
@@ -82,6 +83,15 @@ public class Front_Controller extends HttpServlet {
 				e.printStackTrace();
 			}
 			break;
+		case "/viewstudent.act":
+			action = new ViewStudent();
+			try {
+				forward = action.execute(request, response);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
 		default:
 			forward = new ActionForward();
 			forward.setPath("404.jsp");
@@ -100,10 +110,6 @@ public class Front_Controller extends HttpServlet {
 			}
 
 		}
-
-	}
-
-	public static void main(String[] args) {
 
 	}
 }

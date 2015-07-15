@@ -29,7 +29,7 @@ public class ListSudent implements Action {
 			
 			response.getWriter().write(article);
 		
-			System.out.println(article);
+			//System.out.println(article);
 
 		return null;
 	}
