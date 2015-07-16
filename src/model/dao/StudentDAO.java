@@ -56,7 +56,7 @@ public class StudentDAO {
 	
 	public Student getLastId() throws SQLException{
 		Student stu = new Student();
-		String sql = "select stu_id from hrd_students order by stu_id DESC limit 1";
+		String sql = "select stu_id from hrd_students order by stu_id*1 DESC limit 1";
 		PreparedStatement pres  = cn.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 		ResultSet rs = pres.executeQuery();
 		if(rs.last()){
@@ -114,8 +114,14 @@ public class StudentDAO {
 	
 	public ArrayList<Student> searchByName(String name) throws SQLException{
 		ArrayList<Student> arrList = new ArrayList<Student>();
-		PreparedStatement pre = cn.prepareStatement("select * from hrd_students where stu_name= %?%");
-		pre.setString(1, name);
+		PreparedStatement pre = null; 
+		if(name.equalsIgnoreCase("")||name == null){
+			pre = cn.prepareStatement("select * from hrd_students");
+		}else{
+			pre = cn.prepareStatement("select * from hrd_students where stu_name like ?");
+			pre.setString(1, "%"+name+"%");
+		}
+		
 		ResultSet rs = pre.executeQuery();
 		while(rs.next()){
 			arrList.add(new Student(
@@ -136,8 +142,14 @@ public class StudentDAO {
 	
 	public ArrayList<Student> searchByClass(String stuClass) throws SQLException{
 		ArrayList<Student> arrList = new ArrayList<Student>();
-		PreparedStatement pre = cn.prepareStatement("select * from hrd_students where stu_class= ?");
-		pre.setString(1, stuClass);
+		PreparedStatement pre = null; 
+		if(stuClass.equalsIgnoreCase("---All Class---")){
+			pre = cn.prepareStatement("select * from hrd_students");
+		}else{
+			pre = cn.prepareStatement("select * from hrd_students where stu_class= ?");
+			pre.setString(1, stuClass);
+		}
+		
 		ResultSet rs = pre.executeQuery();
 		while(rs.next()){
 			arrList.add(new Student(

@@ -13,6 +13,7 @@ import controller.student.AddStudent;
 import controller.student.DeleteStudent;
 import controller.student.ListSudent;
 import controller.student.SearchByClass;
+import controller.student.SearchByName;
 import controller.student.UpdateStudent;
 import controller.student.ViewStudent;
 
@@ -95,6 +96,15 @@ public class Front_Controller extends HttpServlet {
 			break;
 		case "/searchclass.act":
 			action = new SearchByClass();
+			try {
+				forward = action.execute(request, response);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
+		case "/searchname.act":
+			action = new SearchByName();
 			try {
 				forward = action.execute(request, response);
 			} catch (Exception e) {
