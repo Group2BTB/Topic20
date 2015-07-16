@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title> Staff and Student Management</title>
+<title>Staff and Student Management</title>
 <link rel="stylesheet" href="css/bootstrap.min.css" />
 <script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
@@ -73,20 +73,24 @@
 			<div class="navbar-header">
 				<form class="navbar-form navbar-left" role="search">
 					<div class="form-group">
-						<input type="text" class="form-control" placeholder="Search by name">
+						<input type="text" class="form-control" name="stuName"
+							id="stuName" onkeyup="searchByName()"
+							placeholder="Search by name">
 					</div>
-					<select class="form-control" name="stu_class" id="stu_class" onchange="searchByClass()">
+					<select class="form-control" name="stuClass" id="stuClass"
+						onchange="searchByClass()">
 						<option>---All Class---</option>
 						<option>BTB</option>
 						<option>SR</option>
 						<option>PP</option>
 					</select>
 					<button type="button" class="btn btn-primary btn-md"
-				data-toggle="modal" data-target="#myModal">Add</button>
+						data-toggle="modal" data-target="#myModal">Add</button>
 				</form>
 			</div>
 		</div>
 		</nav>
+
 		<table class='table table-bordered' id="display">
 		</table>
 	</div>
@@ -215,10 +219,10 @@
 					$("#stu_name").val(data.name);
 					$("#stu_university").val(data.university);
 					$("#stu_class").val(data.stu_class);
-					alert(data.gender);
+					//alert(data.gender);
 					if (data.gender === "1") {
-						$("#female").removeAttr("checked");
-						$("#male").attr("checked", "checked");
+						$("#female").prop("checked", false);
+						$("#male").prop("checked", true);
 					} else {
 						$("#male").removeAttr("checked");
 						$("#female").attr("checked", "checked");
@@ -237,18 +241,33 @@
 		}
 		
 		
-		function searchByClass(stu_class){
+		function searchByClass(){
 			$.ajax({
 				url: "searchclass.act",
 				method: "POST",
 				data:{
-					stu_class: stu_name
+					stu_class: $("#stuClass").val()
 				},
 				success: function(data){
-					list();
+					$("#display").html(listdetailarticle(data));
 				}
 			});
 		}
+
+
+		function searchByName(){
+			$.ajax({
+				url: "searchname.act",
+				method: "POST",
+				data:{
+					stu_name: $("#stuName").val()
+				},
+				success: function(data){
+					$("#display").html(listdetailarticle(data));
+				}
+			});
+		}
+		
 	</script>
 </body>
 </html>
