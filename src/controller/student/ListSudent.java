@@ -21,13 +21,13 @@ public class ListSudent implements Action {
 			HttpServletResponse response) throws Exception {
 			
 			StudentDAO dao = new StudentDAO();
-			ArrayList<Student> articles = dao.list();
+			ArrayList<Student> students = dao.list();
 	
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
-			String article= new Gson().toJson(articles);
+			String student= new Gson().toJson(students);
 			
-			response.getWriter().write(article);
+			response.getWriter().write(student);
 		
 			//System.out.println(article);
 

@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Student Management</title>
+<title> Staff and Student Management</title>
 <link rel="stylesheet" href="css/bootstrap.min.css" />
 <script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
@@ -21,7 +21,8 @@
 							aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
-						<h4 class="modal-title text-center" id="myModalLabel">Add Student Form</h4>
+						<h4 class="modal-title text-center" id="myModalLabel">Add
+							Student Form</h4>
 					</div>
 					<div class="modal-body">
 						<form class="form-horizontal">
@@ -49,31 +50,43 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Gender</label>
 								<div class="col-sm-8">
-									<label class="radio-inline"> 
-									<input type="radio" name="gender" id="male" value="1"> Male
-									</label> 
-									<label class="radio-inline"> 
-									<input type="radio" name="gender" id="female" value="0"> Female
+									<label class="radio-inline"> <input type="radio"
+										name="gender" id="male" value="1"> Male
+									</label> <label class="radio-inline"> <input type="radio"
+										name="gender" id="female" value="0"> Female
 									</label>
 								</div>
 							</div>
 						</form>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-						<button type="button" class="btn btn-primary" onclick="addStudent()" data-dismiss="modal" id="btnSave">Save</button>
+						<button type="button" class="btn btn-success" data-dismiss="modal">Cancel</button>
+						<button type="button" class="btn btn-danger"
+							onclick="addStudent()" data-dismiss="modal" id="btnSave">Save</button>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="text-center h2 text-primary">Student Management</div>
-		<form class="navbar-form navbar-left col-sm-9">
-			<div class="form-group ">
-				<input type="text" class="form-control" placeholder="Search">
-			</div>
-			<button type="button" class="btn btn-primary btn-md"
+		<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<form class="navbar-form navbar-left" role="search">
+					<div class="form-group">
+						<input type="text" class="form-control" placeholder="Search by name">
+					</div>
+					<select class="form-control" name="stu_class" id="stu_class" onchange="searchByClass()">
+						<option>---All Class---</option>
+						<option>BTB</option>
+						<option>SR</option>
+						<option>PP</option>
+					</select>
+					<button type="button" class="btn btn-primary btn-md"
 				data-toggle="modal" data-target="#myModal">Add</button>
-		</form>
+				</form>
+			</div>
+		</div>
+		</nav>
 		<table class='table table-bordered' id="display">
 		</table>
 	</div>
@@ -103,7 +116,7 @@
 			for (var i = 0; i < data.length; i++) {
 				if (data[i].gender == 1) {
 					gender = "M";
-				} else if(data[i].gender == 0){
+				} else if (data[i].gender == 0) {
 					gender = "F";
 				}
 
@@ -113,14 +126,17 @@
 					status = "Deactive";
 				}
 				str += "<tr class='text-center'>";
-				str += "<td>"+ data[i].id+ "</td>";
-				str	+= "<td>"+ data[i].name+ "</td>";
-				str	+= "<td>"+ gender+ "</td>";
-				str	+= "<td>"+ data[i].university+ "</td>";
-				str	+= "<td>"+ data[i].stu_class+ "</td>";
-				str += "<td>"+ status+ "</td>";
-				str += "<td><button class='btn btn-primary btn-sm' onclick= putValuetoForm('"+data[i].id+"') data-toggle='modal' data-target='#myModal'>Edit</button>&nbsp;";
-				str += "<button class='btn btn-primary btn-sm'onclick= deleteStudent('"+ data[i].id+"')>Delete</button></td>";
+				str += "<td>" + data[i].id + "</td>";
+				str += "<td>" + data[i].name + "</td>";
+				str += "<td>" + gender + "</td>";
+				str += "<td>" + data[i].university + "</td>";
+				str += "<td>" + data[i].stu_class + "</td>";
+				str += "<td>" + status + "</td>";
+				str += "<td><button class='btn btn-primary btn-sm' onclick= putValuetoForm('"
+						+ data[i].id
+						+ "') data-toggle='modal' data-target='#myModal'>Edit</button>&nbsp;";
+				str += "<button class='btn btn-primary btn-sm'onclick= deleteStudent('"
+						+ data[i].id + "')>Delete</button></td>";
 				str += "</tr>";
 			}
 			return str;
@@ -136,86 +152,102 @@
 					stu_university : $("#stu_university").val(),
 					stu_class : $("#stu_class").val()
 				},
-				success:function(data){
+				success : function(data) {
 					lists();
 					clear();
 				},
-				error: function(data){
+				error : function(data) {
 					alert("fail");
 				}
-			}); 
+			});
 		}
-		
+
 		/*------- Function Delete Student-------- */
-		function deleteStudent(id){
+		function deleteStudent(id) {
 			$.ajax({
-				url: "deletestudent.act",//destination to get data
-				method: "POST",// use post method
-				data: {
-					stu_id : id // assign value of id to stu_id in controller
+				url : "deletestudent.act",//destination to get data
+				method : "POST",// use post method
+				data : {
+					stu_id : id
+				// assign value of id to stu_id in controller
 				},
-				success:function(data){
+				success : function(data) {
 					lists();// call method list after delete student successfully
 				},
-				error: function(data){
+				error : function(data) {
 					alert("Fail");
 				}
 			});
 		}
 		/* The end of function delete */
-		
+
 		/* ----------function update Student information-------- */
-		function updateStudent(id){
+		function updateStudent(id) {
 			$.ajax({
-				url: "updatestudent.act",
-				method: "POST",
-				data: {
+				url : "updatestudent.act",
+				method : "POST",
+				data : {
 					stu_id : id,
 					stu_name : $("#stu_name").val(),
 					stu_university : $("#stu_university").val(),
-					stu_class: $("#stu_class").val(),
-					gender: $("input[name=gender]:checked").val()
+					stu_class : $("#stu_class").val(),
+					gender : $("input[name=gender]:checked").val()
 				},
-				success: function(data){
+				success : function(data) {
 					lists();
 					clear();
-					$("#btnSave").attr("onclick","addStudent()");
+					$("#btnSave").attr("onclick", "addStudent()");
 				},
-				error: function(data){
+				error : function(data) {
 					alert("fail");
 				}
 			});
 		}
-		
-		function putValuetoForm(id){
+
+		function putValuetoForm(id) {
 			$.ajax({
-				url: "viewstudent.act",
-				method: "POST",
-				data: {
+				url : "viewstudent.act",
+				method : "POST",
+				data : {
 					stu_id : id
 				},
-				success: function(data){
+				success : function(data) {
 					$("#stu_name").val(data.name);
 					$("#stu_university").val(data.university);
 					$("#stu_class").val(data.stu_class);
 					alert(data.gender);
-					if(data.gender === "1"){
+					if (data.gender === "1") {
 						$("#female").removeAttr("checked");
 						$("#male").attr("checked", "checked");
-					}else{
+					} else {
 						$("#male").removeAttr("checked");
 						$("#female").attr("checked", "checked");
 					}
-					$("#btnSave").attr("onclick","updateStudent('"+data.id+"')");
+					$("#btnSave").attr("onclick",
+							"updateStudent('" + data.id + "')");
 				}
 			});
 		}
-		
-		function clear(){
+
+		function clear() {
 			$("#stu_name").val("");
 			$("#stu_university").val("");
 			$("#stu_class").val("");
 			$("input[name=gender]").removeAttr('checked');
+		}
+		
+		
+		function searchByClass(stu_class){
+			$.ajax({
+				url: "searchclass.act",
+				method: "POST",
+				data:{
+					stu_class: stu_name
+				},
+				success: function(data){
+					list();
+				}
+			});
 		}
 	</script>
 </body>

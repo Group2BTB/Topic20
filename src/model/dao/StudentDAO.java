@@ -112,6 +112,50 @@ public class StudentDAO {
 		
 	}
 	
+	public ArrayList<Student> searchByName(String name) throws SQLException{
+		ArrayList<Student> arrList = new ArrayList<Student>();
+		PreparedStatement pre = cn.prepareStatement("select * from hrd_students where stu_name= %?%");
+		pre.setString(1, name);
+		ResultSet rs = pre.executeQuery();
+		while(rs.next()){
+			arrList.add(new Student(
+				rs.getString("stu_id"),
+				rs.getString("stu_name"),
+				rs.getInt("stu_gender"),
+				rs.getString("stu_university"),
+				rs.getString("stu_class"),
+				rs.getInt("stu_status")));
+		}
+		
+		rs.close();
+		pre.close();
+		cn.close();
+		return arrList;
+		
+	}
+	
+	public ArrayList<Student> searchByClass(String stuClass) throws SQLException{
+		ArrayList<Student> arrList = new ArrayList<Student>();
+		PreparedStatement pre = cn.prepareStatement("select * from hrd_students where stu_class= ?");
+		pre.setString(1, stuClass);
+		ResultSet rs = pre.executeQuery();
+		while(rs.next()){
+			arrList.add(new Student(
+				rs.getString("stu_id"),
+				rs.getString("stu_name"),
+				rs.getInt("stu_gender"),
+				rs.getString("stu_university"),
+				rs.getString("stu_class"),
+				rs.getInt("stu_status")));
+		}
+		
+		rs.close();
+		pre.close();
+		cn.close();
+		return arrList;
+		
+	}
+	
 	/*public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		
 		StudentDAO dao = new StudentDAO();
